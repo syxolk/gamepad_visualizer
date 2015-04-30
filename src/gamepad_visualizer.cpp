@@ -4,7 +4,7 @@
 
 bool GamepadVisualizer::initialize() {
     gamepad = datamanager()
-                ->readChannel<Gamepad>(this,"Xbox");
+                ->readChannel<Gamepad>(this,"CONTROLLER_1");
 
     imagePtr = datamanager()
             ->writeChannel<lms::imaging::Image>(this, "CAMERA_IMAGE");
