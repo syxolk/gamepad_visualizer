@@ -32,7 +32,7 @@ bool GamepadVisualizer::cycle() {
 
 
     g.drawRect(50, 100, 50, 200);
-    g.drawVerticalLine(75, 100, (int)(lt.x * 200));
+    g.drawVerticalLine(75, 100, 100 + (int)(rt.x * 100));
 
     g.drawRect(300, 100, 50, 200);
     g.drawVerticalLine(325, 100, 100 + (int)(rt.x * 100));
