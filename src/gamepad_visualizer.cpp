@@ -13,7 +13,7 @@ bool GamepadVisualizer::initialize() {
 }
 
 bool GamepadVisualizer::cycle() {
-    imagePtr->resize(400, 400, lms::imaging::Format::BGRA);
+    imagePtr->resize(600, 400, lms::imaging::Format::BGRA);
     imagePtr->fill(255);  // everything white
 
     lms::imaging::BGRAImageGraphics g(*imagePtr);
@@ -33,10 +33,10 @@ bool GamepadVisualizer::cycle() {
     drawTrigger(g, lt, 50, 100, 50, 200);
     drawTrigger(g, rt, 500, 100, 50, 200);
 
-    drawButton(g, ba, 300, 100, 50, 50);
-    drawButton(g, bb, 350, 100, 50, 50);
-    drawButton(g, bx, 400, 100, 50, 50);
-    drawButton(g, by, 500, 100, 50, 50);
+    drawButton(g, ba, 200, 300, 50, 50);
+    drawButton(g, bb, 250, 300, 50, 50);
+    drawButton(g, bx, 300, 300, 50, 50);
+    drawButton(g, by, 350, 300, 50, 50);
 
     return true;
 }
@@ -59,7 +59,7 @@ void GamepadVisualizer::drawTrigger(lms::imaging::Graphics &g,
                                     int x, int y, int w, int h) {
     g.setColor(lms::imaging::black);
     g.drawRect(x, y, w, h);
-    g.drawVerticalLine(x + w/2, y, y + (int)(axis.x * h));
+    g.drawVerticalLine(x + w/2, y, h / 2 + (int)(axis.x * h / 2));
 }
 
 void GamepadVisualizer::drawButton(lms::imaging::Graphics &g, bool pressed,
