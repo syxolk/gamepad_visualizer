@@ -21,6 +21,7 @@ private:
 
     lms::imaging::Image *imagePtr;
     const Gamepad *gamepad;
+    const lms::type::ModuleConfig *config;
 };
 
 #endif /* GAMEPAD_VISUALIZER_H */

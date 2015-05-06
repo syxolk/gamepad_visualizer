@@ -1,6 +1,7 @@
 #include <gamepad_visualizer.h>
 #include <lms/imaging/graphics.h>
 #include <gamepad/gamepad_types.h>
+#include <lms/extra/time.h>
 
 bool GamepadVisualizer::initialize() {
     gamepad = datamanager()
@@ -8,6 +9,8 @@ bool GamepadVisualizer::initialize() {
 
     imagePtr = datamanager()
             ->writeChannel<lms::imaging::Image>(this, "IMAGE");
+
+    config = getConfig();
 
     return true;
 }
@@ -37,6 +40,12 @@ bool GamepadVisualizer::cycle() {
     drawButton(g, bb, 250, 300, 50, 50);
     drawButton(g, bx, 300, 300, 50, 50);
     drawButton(g, by, 350, 300, 50, 50);
+
+    drawButton(g, gamepad->connected(), 400, 300, 50, 50);
+    drawButton(g, lms::extra::PrecisionTime::now() - gamepad->timestamp()
+               < lms::extra::PrecisionTime::fromMillis(
+                   config->get<int>("failSafeAfterMillis", 1000)),
+               450, 300, 50, 50);
 
     return true;
 }

@@ -7,7 +7,7 @@ LMS module that renders the current gamepad state in an imae
 - **IMAGE** - Image to draw in
 
 ## Config
-*no config*
+- **failSafeAfterMillis** - milliseconds after last timestamp to show failsafe
 
 ## Recommended Modules
 - [gamepad_controller](https://github.com/Phibedy/gamepad_controller) - Imports the gamepad
