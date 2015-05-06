@@ -4,10 +4,10 @@
 
 bool GamepadVisualizer::initialize() {
     gamepad = datamanager()
-                ->readChannel<Gamepad>(this,"CONTROLLER_1");
+                ->readChannel<Gamepad>(this, "GAMEPAD");
 
     imagePtr = datamanager()
-            ->writeChannel<lms::imaging::Image>(this, "CAMERA_IMAGE");
+            ->writeChannel<lms::imaging::Image>(this, "IMAGE");
 
     return true;
 }
@@ -17,27 +17,59 @@ bool GamepadVisualizer::cycle() {
     imagePtr->fill(255);  // everything white
 
     lms::imaging::BGRAImageGraphics g(*imagePtr);
-    g.setColor(lms::imaging::black);
 
     Gamepad::axis ls = gamepad->getAxis("LS");
-    Gamepad::axis rt = gamepad->getAxis("RT");
+    Gamepad::axis rs = gamepad->getAxis("RS");
     Gamepad::axis lt = gamepad->getAxis("LT");
+    Gamepad::axis rt = gamepad->getAxis("RT");
+    bool ba = gamepad->buttonPressed("A");
+    bool bb = gamepad->buttonPressed("B");
+    bool bx = gamepad->buttonPressed("X");
+    bool by = gamepad->buttonPressed("Y");
 
-    g.drawRect(100, 100, 200, 200);
-    g.setColor(lms::imaging::red);
-    g.drawVerticalLine(200, 100, 200);
-    g.drawHorizontalLine(100, 200, 200);
-    g.setColor(lms::imaging::black);
-    g.drawLine(200, 200, 200 + (int)(ls.x * 100), 200 + (int)(ls.y * 100));
+    draw2DAxis(g, ls, 100, 100, 200, 200);
+    draw2DAxis(g, rs, 300, 100, 200, 200);
 
+    drawTrigger(g, lt, 50, 100, 50, 200);
+    drawTrigger(g, rt, 500, 100, 50, 200);
 
-    g.drawRect(50, 100, 50, 200);
-    g.drawVerticalLine(75, 100, 100 + (int)(lt.x * 100));
-
-    g.drawRect(300, 100, 50, 200);
-    g.drawVerticalLine(325, 100, 100 + (int)(rt.x * 100));
+    drawButton(g, ba, 300, 100, 50, 50);
+    drawButton(g, bb, 350, 100, 50, 50);
+    drawButton(g, bx, 400, 100, 50, 50);
+    drawButton(g, by, 500, 100, 50, 50);
 
     return true;
+}
+
+void GamepadVisualizer::draw2DAxis(lms::imaging::Graphics &g,
+                                   const Gamepad::axis &axis, int x, int y,
+                                   int w, int h) {
+    g.setColor(lms::imaging::black);
+    g.drawRect(x, y, w, h);
+    g.setColor(lms::imaging::red);
+    g.drawVerticalLine(x + w / 2, y, h);
+    g.drawHorizontalLine(x, y + h / 2, w);
+    g.setColor(lms::imaging::black);
+    g.drawLine(x + w/2, y + h/2, x + w/2 + (int)(axis.x * w / 2),
+               y + h/2 + (int)(axis.y * h / 2));
+}
+
+void GamepadVisualizer::drawTrigger(lms::imaging::Graphics &g,
+                                    const Gamepad::axis &axis,
+                                    int x, int y, int w, int h) {
+    g.setColor(lms::imaging::black);
+    g.drawRect(x, y, w, h);
+    g.drawVerticalLine(x + w/2, y, y + (int)(axis.x * h));
+}
+
+void GamepadVisualizer::drawButton(lms::imaging::Graphics &g, bool pressed,
+                                   int x, int y, int w, int h) {
+    g.setColor(lms::imaging::black);
+    g.drawRect(x, y, w, h);
+    if(pressed) {
+        g.drawLine(x, y, x + w, y + h);
+        g.drawLine(x + w, y, x, y + h);
+    }
 }
 
 bool GamepadVisualizer::deinitialize() {

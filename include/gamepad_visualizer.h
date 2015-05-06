@@ -4,6 +4,7 @@
 #include <lms/datamanager.h>
 #include <lms/imaging/image.h>
 #include <gamepad/gamepad.h>
+#include <lms/imaging/graphics.h>
 
 class GamepadVisualizer : public lms::Module {
 public:
@@ -11,6 +12,13 @@ public:
     bool cycle() override;
     bool deinitialize() override;
 private:
+    void draw2DAxis(lms::imaging::Graphics &g, const Gamepad::axis &axis,
+                    int x, int y, int w, int h);
+    void drawTrigger(lms::imaging::Graphics &g, const Gamepad::axis &axis,
+                    int x, int y, int w, int h);
+    void drawButton(lms::imaging::Graphics &g, bool pressed,
+                                       int x, int y, int w, int h);
+
     lms::imaging::Image *imagePtr;
     const Gamepad *gamepad;
 };
